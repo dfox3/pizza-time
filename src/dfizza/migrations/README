@@ -1,0 +1,25 @@
+Generic single-database configuration with an async dbapi.
+
+Init command:
+
+```
+uv run alembic init -t async src/dfizza/migrations
+```
+
+New migrations:
+
+```
+uv run alembic revision --autogenerate -m "Create pizza models"
+```
+
+Apply migrations:
+
+```
+alembic upgrade head
+```
+
+Undo migrations:
+
+```
+alembic downgrade -1
+```

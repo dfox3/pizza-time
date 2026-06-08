@@ -1,0 +1,16 @@
+{
+  "_checkout": null,
+  "_output_dir": "/Users/dfox3/repos/pizza-time",
+  "_repo_dir": "/Users/dfox3/.cookiecutters/cookiecutter-uv-hypermodern-python",
+  "_template": "gh:bosd/cookiecutter-uv-hypermodern-python",
+  "author": "dfox3",
+  "copyright_year": "2026",
+  "development_status": "Development Status :: 1 - Planning",
+  "email": "fox.dylan92@gmail.com",
+  "friendly_name": "dFizza",
+  "github_user": "dfox3",
+  "license": "Apache-2.0",
+  "package_name": "dfizza",
+  "project_name": "dfizza",
+  "version": "0.0.0"
+}
