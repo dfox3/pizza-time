@@ -1,11 +1,11 @@
 import "./App.css";
 import { ResourcePage } from "./components/ResourcePage";
+import Navbar from "./components/Navbar";
+import type { DoughRecipe } from "./schemas/doughRecipe";
 import {
   doughRecipeGridFields,
   doughRecipeQueryParams,
-  doughRecipeDetailFields,
 } from "./schemas/doughRecipe";
-import type { DoughRecipe } from "./schemas/doughRecipe";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router";
 import { DoughRecipeDetails } from "./pages/DoughRecipeDetails";
 
@@ -13,7 +13,8 @@ export default function App() {
   return (
     <BrowserRouter>
       <div className="page">
-        <h1>dFizza</h1>
+        <Navbar />
+
         <Routes>
           <Route path="/" element={<Navigate to="/dough-recipe" replace />} />
           <Route

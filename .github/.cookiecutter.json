@@ -1,0 +1,16 @@
+{
+  "_checkout": null,
+  "_output_dir": "/Users/dfox3/repos/card-game",
+  "_repo_dir": "/Users/dfox3/.cookiecutters/cookiecutter-hypermodern-python",
+  "_template": "gh:cjolowicz/cookiecutter-hypermodern-python",
+  "author": "Dylan Fox",
+  "copyright_year": "2024",
+  "development_status": "Development Status :: 1 - Planning",
+  "email": "fox.dylan92@gmail.com",
+  "friendly_name": "Buddie_Boogie",
+  "github_user": "dfox3",
+  "license": "Apache-2.0",
+  "package_name": "buddie_boogie",
+  "project_name": "buddie_boogie",
+  "version": "0.0.0"
+}
