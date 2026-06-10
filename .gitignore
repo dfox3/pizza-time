@@ -9,3 +9,7 @@
 /src/*.egg-info/
 __pycache__/
 /node_modules/
+
+
+# local sqlite database
+*.db

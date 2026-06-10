@@ -1,14 +1,18 @@
 from contextlib import asynccontextmanager
+from pathlib import Path
 
 import uvicorn
-from fastapi import FastAPI, Request
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 from sqlalchemy.ext.asyncio import create_async_engine
 from sqlalchemy.orm import sessionmaker
 from sqlmodel import SQLModel
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 import dfizza.models.pizza  # noqa: F401 - ensure models are registered before create_all
-from dfizza.routers import pizza
+from dfizza.routers import pizza, ui
 
 # To switch to PostgreSQL, change the URL to:
 # "postgresql+asyncpg://user:password@host/dbname"
@@ -30,14 +34,18 @@ async def lifespan(app: FastAPI):
     print("[SHUTDOWN] Closed database connection.")
 
 
+WEB_DIR = Path(__file__).parent.parent.parent / "web"
+
 app = FastAPI(lifespan=lifespan)
+app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
 app.include_router(pizza.router)
+app.include_router(ui.router)
+app.mount("/static", StaticFiles(directory=WEB_DIR), name="static")
 
 
-@app.get("/", tags=["health"])
-async def read_root(request: Request):
-    async with request.app.state.db_session() as session:
-        return {"status": "healthy", "database_ready": session is not None}
+@app.get("/", response_class=FileResponse, include_in_schema=False)
+async def serve_index():
+    return FileResponse(WEB_DIR / "htmx" / "index.html")
 
 
 if __name__ == "__main__":
