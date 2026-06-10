@@ -273,12 +273,8 @@ class DoughRecipeRead(DoughRecipeBase):
             self.multiplier = 1.0
 
             print(f"if multiplier: {self.original_ball_weight}")
-        elif self.ball_weight == 0.0:
-            # First validation with no scaling: still need to set ball_weight
-            # self.ball_weight = self.original_ball_weight
-            self.diameter = self.get_diameter(ball_weight=self.ball_weight)
-            print(f"elif ball_weight: {self.original_ball_weight}")
         self.ball_weight = self.original_ball_weight
+        self.diameter = self.get_diameter(ball_weight=self.ball_weight)
         print(self.original_ball_weight)
         self.sigfig_values()
         return self

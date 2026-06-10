@@ -47,6 +47,37 @@ async def create_recipe(payload: DoughRecipeCreate, session: SessionDep) -> Doug
     return recipe
 
 
+@router.get("/dough-recipe/list", response_model=list[DoughRecipeRead], tags=["recipe"])
+async def list_recipes(
+    session: SessionDep,
+    multiplier: float = Query(1.0, gt=0, description="Scale all gram amounts by this factor"),
+    target_diameter: Optional[float] = Query(
+        None, gt=0, description="Scale ingredients to produce a pizza of this diameter (inches); overrides multiplier"
+    ),
+) -> list[DoughRecipeRead]:
+    result = await session.exec(select(DoughRecipe))
+    return [
+        DoughRecipeRead.model_construct(**r.model_dump(), multiplier=multiplier, target_diameter=target_diameter)
+        for r in result.all()
+    ]
+
+
+@router.get("/dough-recipe/{recipe_id}", response_model=DoughRecipeRead, tags=["recipe"])
+async def get_recipe(recipe_id: int, session: SessionDep) -> DoughRecipe:
+    recipe = await session.get(DoughRecipe, recipe_id)
+    if not recipe:
+        raise HTTPException(status_code=404, detail="Recipe not found")
+    return recipe
+
+
+@router.get("/dough-recipe/{recipe_id}/update-fields", response_model=DoughRecipeUpdate, tags=["recipe"])
+async def get_recipe_update_fields(recipe_id: int, session: SessionDep) -> DoughRecipeUpdate:
+    recipe = await session.get(DoughRecipe, recipe_id)
+    if not recipe:
+        raise HTTPException(status_code=404, detail="Recipe not found")
+    return DoughRecipeUpdate.model_construct(**recipe.model_dump())
+
+
 @router.patch("/dough-recipe/{recipe_id}", response_model=DoughRecipeRead, tags=["recipe"])
 async def update_recipe(recipe_id: int, payload: DoughRecipeUpdate, session: SessionDep) -> DoughRecipe:
     recipe = await session.get(DoughRecipe, recipe_id)
@@ -70,21 +101,6 @@ async def delete_recipe(recipe_id: int, session: SessionDep):
     await session.delete(recipe)
     await session.commit()
     return {"detail": "Recipe deleted"}
-
-
-@router.get("/dough-recipe/list", response_model=list[DoughRecipeRead], tags=["recipe"])
-async def list_recipes(
-    session: SessionDep,
-    multiplier: float = Query(1.0, gt=0, description="Scale all gram amounts by this factor"),
-    target_diameter: Optional[float] = Query(
-        None, gt=0, description="Scale ingredients to produce a pizza of this diameter (inches); overrides multiplier"
-    ),
-) -> list[DoughRecipeRead]:
-    result = await session.exec(select(DoughRecipe))
-    return [
-        DoughRecipeRead.model_construct(**r.model_dump(), multiplier=multiplier, target_diameter=target_diameter)
-        for r in result.all()
-    ]
 
 
 @router.get("/dough-recipe/{recipe_id}/ingredients", response_model=DoughRecipeIngredientsRead, tags=["recipe"])
