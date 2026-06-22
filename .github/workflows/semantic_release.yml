@@ -29,7 +29,7 @@ jobs:
       id-token: write # to enable use of OIDC for npm provenance
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           # Use PAT with admin permissions to bypass branch protection
           token: ${{ secrets.SEMANTIC_RELEASE_TOKEN }}
